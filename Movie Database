@@ -1,0 +1,70 @@
+CREATE TABLE actors (
+    id INTEGER PRIMARY KEY,
+    fullname TEXT,
+    age INTEGER,
+    birthplace TEXT);
+    
+INSERT INTO actors VALUES (1, "Jennifer Aniston", 53, "Los Angeles, CA");
+INSERT INTO actors VALUES (2, "David Schwimmer", 56, "New York, NY");
+INSERT INTO actors VALUES (3, "Matthew Perry", 56, "Williamstown, MA");
+INSERT INTO actors VALUES (4, "Lisa Kudrow", 59, "Los Angeles, CA");
+INSERT INTO actors VALUES (5, "Matt Leblanc", 55, "Newton, MA");
+INSERT INTO actors VALUES(6, "Courtney Cox", 58, "Birmingham, AL");
+
+CREATE TABLE spouses (
+    id INTEGER PRIMARY KEY,
+    fullname TEXT,
+    spouse_id INTEGER);
+
+INSERT INTO spouses VALUES (1, "Michael Stern", 4);
+INSERT INTO spouses VALUES (2, "Johnny McDaid", 6);
+
+CREATE TABLE movies (
+    id INTEGER PRIMARY KEY,
+    starring_actor INTEGER,
+    title TEXT,
+    release_year INTEGER,
+    genre TEXT,
+    box_office INTEGER);
+    
+INSERT INTO movies VALUES (1, 1, "Just Go with It", 2011, "Romance/Comedy", 215000000);
+INSERT INTO movies VALUES (2, 1, "The Break Up", 2006, "Romance/Comedy", 205700000);
+INSERT INTO movies VALUES (3, 1, "Cake", 2014, "Drama", 2900000);
+INSERT INTO movies VALUES (4, 2, "Madagascar", 2005, "Family/Comedy", 556600000);
+INSERT INTO movies VALUES (5, 2, "Band of Brothers", 2001, "War", 125000000);
+INSERT INTO movies VALUES (6, 2, "Trust", 2010, "Thriller/Drama", 595439);
+INSERT INTO movies VALUES (7, 5, "Lost in Space", 1998, "Sci Fi/Adventure", 136200000);
+INSERT INTO movies VALUES (8, 5, "Lovesick", 2014, "Comedy", 10000000);
+INSERT INTO movies VALUES (9, 3, "Fools Rush In", 1997, "Romance/Comedy", 42000000);
+INSERT INTO movies VALUES (10, 3, "17 Again", 2009,
+"Romance/Comedy", 139500000);
+INSERT INTO movies VALUES (11, 4, "Easy A", 2010, "Romance/Comedy", 75000000);
+INSERT INTO movies VALUES (12, 4, "Boss Baby", 2017, "Family/Comedy", 528000000);
+INSERT INTO movies VALUES (13, 4, "PS I Love You", 2007, "Romance/Drama", 156800000);
+INSERT INTO movies VALUES (14, 6, "Scream", 2022, "Horror/Thriller", 140000000);
+INSERT INTO movies VALUES (15, 6, "Ace Ventura Pet Detective", 1994, "Comedy", 107200000);
+
+/* What movies have the actors starred in?*/
+SELECT fullname, title FROM actors
+JOIN movies
+ON starring_actor = actors.id;
+
+/*  How many movies has the actors starred in?*/
+
+SELECT fullname, COUNT(genre) AS amt_of_movies  FROM movies
+JOIN actors
+ON actors.id = starring_actor
+GROUP BY fullname;
+
+/* How much money has each actor brought in at the box office?*/
+
+SELECT fullname, SUM(box_office) AS total_revenue FROM movies
+JOIN actors
+ON actors.id = starring_actor
+GROUP BY fullname ORDER BY total_revenue DESC;
+
+/*Are the actors married?*/
+SELECT actors.fullname AS Actor, spouses.fullname AS Partner 
+FROM actors
+LEFT JOIN spouses
+ON spouses.spouse_id = actors.id;
